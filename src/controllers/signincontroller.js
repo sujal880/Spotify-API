@@ -3,7 +3,7 @@ const bcrypt=require('bcrypt');
 require('dotenv').config();
 const secretkey=process.env.SECRETKEY;
 const jwt=require('jsonwebtoken');
-const checkemail = process.env.email_regex;
+const checkemail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const sendmailController = require("./sendmailcontroller");
 const signinController=async(req,res)=>{
     const {email,password}=req.body;
@@ -44,6 +44,7 @@ const signinController=async(req,res)=>{
         
     }
     catch(ex){
+        console.log(ex);
         res.status(500).json({
             message:"internal server error"
         })

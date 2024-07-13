@@ -1,7 +1,7 @@
 const User = require("../models/usermodel");
 require('dotenv').config();
 const bcrypt = require('bcrypt');
-const checkemail = process.env.email_regex;
+const checkemail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const signupController = async (req, res) => {
     try {
         const { email, password, dob, createdat } = req.body;
