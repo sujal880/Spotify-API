@@ -3,6 +3,7 @@ const bcrypt=require('bcrypt');
 require('dotenv').config();
 const secretkey=process.env.SECRETKEY;
 const jwt=require('jsonwebtoken');
+const sendmailController = require("./sendmailcontroller");
 const signinController=async(req,res)=>{
     const {email,password}=req.body;
     try{
@@ -26,6 +27,7 @@ const signinController=async(req,res)=>{
         const token=jwt.sign({
             userId:existinguser._id
         },secretkey,{expiresIn:'48h'});
+        sendmailController(email);
         res.status(200).json({
             message:`Welcome ${existinguser.email}`,
             data:existinguser,
