@@ -3,6 +3,7 @@ const bcrypt=require('bcrypt');
 require('dotenv').config();
 const secretkey=process.env.SECRETKEY;
 const jwt=require('jsonwebtoken');
+const checkemail = process.env.email_regex;
 const sendmailController = require("./sendmailcontroller");
 const signinController=async(req,res)=>{
     const {email,password}=req.body;
@@ -12,27 +13,35 @@ const signinController=async(req,res)=>{
                 message:"enter required field's email and password"
             })
         }
-        const existinguser=await User.findOne({email});
-        if(!existinguser){
-            res.status(403).json({
-                message:"user not found please sign up"
+        else if(checkemail.test(email)){
+            const existinguser=await User.findOne({email});
+            if(!existinguser){
+                res.status(403).json({
+                    message:"user not found please sign up"
+                })
+            }
+            const isMatch=await bcrypt.compare(password,existinguser.password,);
+            if(!isMatch){
+                res.status(403).json({
+                    message:"password doesnt match"
+                })
+            }
+            const token=jwt.sign({
+                userId:existinguser._id
+            },secretkey,{expiresIn:'48h'});
+            sendmailController(email);
+            res.status(200).json({
+                message:`Welcome ${existinguser.email}`,
+                data:existinguser,
+                token:token
             })
         }
-        const isMatch=await bcrypt.compare(password,existinguser.password,);
-        if(!isMatch){
+        else{
             res.status(403).json({
-                message:"password doesnt match"
+                message: "email is Not valid!"
             })
         }
-        const token=jwt.sign({
-            userId:existinguser._id
-        },secretkey,{expiresIn:'48h'});
-        sendmailController(email);
-        res.status(200).json({
-            message:`Welcome ${existinguser.email}`,
-            data:existinguser,
-            token:token
-        })
+        
     }
     catch(ex){
         res.status(500).json({
