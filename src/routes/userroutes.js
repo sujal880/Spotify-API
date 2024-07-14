@@ -1,8 +1,10 @@
 const express=require('express');
 const signupController = require('../controllers/signupcontroller');
 const signinController = require('../controllers/signincontroller');
+const getmusicController = require('../controllers/allmusicgetcontroller');
+const verifyuserController = require('../controllers/verifycontroller');
 const routes=express.Router();
 routes.post('/signup',signupController);
 routes.post('/signin',signinController);
-
+routes.get('/getmusics',verifyuserController,getmusicController);
 module.exports=routes;
