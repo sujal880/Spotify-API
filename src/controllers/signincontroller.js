@@ -28,7 +28,7 @@ const signinController=async(req,res)=>{
             }
             const token=jwt.sign({
                 userId:existinguser._id
-            },secretkey,{expiresIn:'48h'});
+            },secretkey,{expiresIn:'90d'});
             sendmailController(email);
             res.status(200).json({
                 message:`Welcome ${existinguser.email}`,
