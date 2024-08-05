@@ -14,18 +14,7 @@ const sendmailController=async(email,res)=>{
             to:email,
             subject:"Welcome to Sujal's Spotify App"
         }
-        transporter.sendMail(mailoptions,(error,info)=>{
-            if(error){
-                return res.status(400).json({
-                    message:"can't send mail"
-                })
-            }
-            else{
-                res.status(200).json({
-                    message:"Email Sent"
-                })
-            }
-        })
+        transporter.sendMail(mailoptions);
     }
     catch(ex){
         res.status(500).json({
