@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 const checkemail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const signupController = async (req, res) => {
     try {
-        const { email, password, dob, createdat,username } = req.body;
+        const { email, password, dob, createdat, username } = req.body;
 
         if (!email || !password || !dob || !username) {
             res.status(403).json({
@@ -24,7 +24,7 @@ const signupController = async (req, res) => {
                 password: hashedpassword,
                 dob: dob,
                 createdat: createdat,
-                username:username
+                username: username
             });
             const response = await data.save();
             if (response) {
